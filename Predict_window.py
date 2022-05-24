@@ -1,3 +1,5 @@
+import time
+
 import streamlit as st
 import pandas as pd
 import os
@@ -30,10 +32,6 @@ def app():
         predict = st.button('Predict')
     with col2:
         cancel = st.button('Stop')
-    if predict:
-        st.write('**Predicting...**')
-    if cancel:
-        st.write('**Cancel prediction!**')
 
     with model:
         logo_path = r'/media/nghia/Nguyen NghiaW/Bee_streamlit/img/Lovepik_com-401013367-lovely-bees.png'
@@ -41,13 +39,13 @@ def app():
         resize_logo = logo.resize((100, 100))
         st.sidebar.image(resize_logo)
         st.sidebar.selectbox('Select your prediction model:',
-                             ('CNN', 'AlexNet', 'LeNet'))
+                             ('CNN', 'AlexNet', 'LeNet', 'VGG', 'ResNet'))
         thresh = st.sidebar.slider('Select your prediction threshold:', 0.0, 1.0, 0.1)
 
     with add:
         file = st.file_uploader('Upload your image you want to predict')
-        if file:
-            file = r'/media/nghia/Nguyen NghiaW/Bee_streamlit/img/BeeSmall.jpg'
+        if file is not None:
+            #file = r'/media/nghia/Nguyen NghiaW/Bee_streamlit/img/BeeSmall.jpg'
             img = Image.open(file)
             st.title("Here is the image you've selected")
             resized_image = img.resize((336, 336))
@@ -69,13 +67,19 @@ def app():
 
 
     if predict:
-        if subspecies and health:
-            st.write(df1)
-            st.write(df2)
-        elif subspecies:
-            st.write(df1)
-        elif health:
-            st.write(df2)
-        else:
-            st.write('**no task is selected!**')
+        with st.spinner('Predicting'):
+            time.sleep(3)
+            if subspecies and health:
+                st.write(df1)
+                st.write(df2)
+            elif subspecies:
+                st.write(df1)
+            elif health:
+                st.write(df2)
+            else:
+                st.write('**no task is selected!**')
+        st.success('Done!')
+
+    if cancel:
+        st.write('**Cancel prediction!**')
 

@@ -3,8 +3,10 @@ import pandas as pd
 from PIL import  Image
 import Train_window
 import Predict_window
+import Analysis_window
 
 PAGES = {
+    "Data analysis stage": Analysis_window,
     "Training stage": Train_window,
     "Prediction stage": Predict_window
 }

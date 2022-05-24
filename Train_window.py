@@ -4,6 +4,7 @@ import os
 import matplotlib.pyplot as plt
 import plotly.graph_objs as go
 from PIL import  Image
+import time
 from plotly.offline import iplot
 
 def app():
@@ -34,9 +35,14 @@ def app():
      #   jump = st.button('Go to prediction window')
 
     if train_progress:
-        st.write('Training...')
-    if cancel:
-        st.write('Cancel training!')
+        my_bar = st.progress(0)
+        for percent in range(100):
+            time.sleep(1.2)
+            my_bar.progress(percent + 1)
+
+        #with st.spinner('Training'):
+        #    time.sleep(3)
+        st.success('Done!')
 
     with model:
         logo_path = r'/media/nghia/Nguyen NghiaW/Bee_streamlit/img/Lovepik_com-401013367-lovely-bees.png'
@@ -44,17 +50,17 @@ def app():
         resize_logo = logo.resize((100,100))
         st.sidebar.image(resize_logo)
         st.sidebar.selectbox('Select your training model:',
-                             ('CNN', 'AlexNet', 'LeNet'))
+                             ('CNN', 'AlexNet', 'LeNet', 'VGG', 'ResNet'))
         thresh = st.sidebar.slider('Select your threshold:', 0.0, 1.0, 0.1)
 
     with add:
-        file = st.file_uploader('Upload your image')
-        if file:
-            file = r'/media/nghia/Nguyen NghiaW/Bee_streamlit/img/BeeSmall.jpg'
-            img = Image.open(file)
-            st.title("Here is the image you've selected")
-            resized_image = img.resize((336, 336))
-            st.image(resized_image)
+        #file = st.file_uploader('Upload your image')
+        #if file:
+         #   file = r'/media/nghia/Nguyen NghiaW/Bee_streamlit/img/BeeSmall.jpg'
+         #   img = Image.open(file)
+         #   st.title("Here is the image you've selected")
+         #   resized_image = img.resize((336, 336))
+         #   st.image(resized_image)
 
         tab = st.file_uploader('Upload your dataset') #, type=['csv', 'xlsx']
         if tab:
@@ -65,3 +71,5 @@ def app():
     with train:
         ratio = st.slider('Select training ratio (%):')
         st.write('training rate is ', ratio,'%')
+    if cancel:
+        st.write('Cancel training!')
